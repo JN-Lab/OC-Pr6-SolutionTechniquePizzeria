@@ -1,0 +1,60 @@
+{
+  "utilisateur" : {
+      "nom" : [],
+      "prenom" : [],
+      "mail" : [],
+      "password" : [],
+      "role": ["responsable groupe", "responsable restaurant", "pizzaiolo", "vendeur", "livreur"],
+  },
+  "adresse" : {
+      "destinataire" : [],
+      "voie" : [],
+      "numero_voie" : [],
+      "code_postal" : [],
+      "ville" : [],
+      "renseignement_supplementaire" : [],
+      "telephone" : [],
+  },
+  "commande" : {
+      "prix_ttc" : [],
+      "tva" : [],
+      "type_livraison" : ["sur place", "web", "telephone" ],
+      "mode_reglement" : ["CB", "espece"],
+      "statut-paiement" : ["en attente", "paye"],
+      "statut-commande" : ["en attente", "en preparation", "en livraison", "livree"],
+  },
+  "date" : {
+      "date_creation": [],
+      "date_suppression" : [],
+      "date_debut" : [],
+      "date_fin" : [],
+      "date" : [],
+      "date_debut_operation" : [],
+      "date_fin_operation" : [],
+  },
+  "restaurant" : {
+      "nom" : []
+  },
+  "pizza" : {
+      "nom" : [],
+      "description" : [],
+      "prix_unitaire" : [],
+      "prix_unitaire_paye" : [],
+      "disponibilite" : ["en stock", "en rupture"],
+      "quantite" : [],
+  },
+  "categorie" : {
+      "nom" : [],
+  },
+  "ingredient" : {
+      "nom" : [],
+      "prix_unitaire" : [],
+      "quantite_globale" : [],
+      "quantite_necessaire" : [],
+      "quantite_allouee" : [],
+  },
+  "recette" : {
+      "description" : [],
+      "recette" : []
+  }
+}
