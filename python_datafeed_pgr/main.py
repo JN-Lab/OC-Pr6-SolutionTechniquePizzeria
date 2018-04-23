@@ -1,6 +1,5 @@
 #! /usr/bin/env python3
 # coding: utf-8
-from faker_generator import FakerGenerator
 from inject import InjectData
 
 def main():
