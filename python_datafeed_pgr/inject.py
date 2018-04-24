@@ -17,3 +17,4 @@ class Inject:
         self.inject_pizza.set_ingredients()
         self.inject_pizza.set_recipes(10)
         self.inject_pizza.set_categories()
+        self.inject_pizza.set_pizza()

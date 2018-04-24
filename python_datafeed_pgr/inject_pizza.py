@@ -84,4 +84,49 @@ class InjectPizzaData:
                     connexion.commit()
 
     def set_pizza(self):
-        pass
+
+        ingredient_ids = self._get_ingredient_ids()
+        print(ingredient_ids)
+        recipe_ids = self._get_recipe_ids()
+        category_ids = self._get_category_ids()
+        category_associations = self._get_category_ids_association()
+        print(category_associations)
+        #get ingredients id
+        #get recette
+        #get categorie id and category association
+
+    def _get_ingredient_ids(self):
+
+        with SQLconnexion() as connexion:
+            with connexion.cursor() as cursor:
+                sql = """SELECT id FROM ingredient"""
+                cursor.execute(sql)
+                ingredient_ids = cursor.fetchall()
+                return ingredient_ids
+
+    def _get_recipe_ids(self):
+
+        with SQLconnexion() as connexion:
+            with connexion.cursor() as cursor:
+                sql = """SELECT id FROM recette"""
+                cursor.execute(sql)
+                recipe_ids = cursor.fetchall()
+                return recipe_ids
+
+    def _get_category_ids(self):
+
+        with SQLconnexion() as connexion:
+            with connexion.cursor() as cursor:
+                sql = """SELECT id FROM categorie_pizza"""
+                cursor.execute(sql)
+                category_ids = cursor.fetchall()
+                return category_ids
+
+    def _get_category_ids_association(self):
+
+        with SQLconnexion() as connexion:
+            with connexion.cursor() as cursor:
+                sql = """SELECT id_cat_parent, id_cat_enfant FROM sous_cat_par_cat"""
+                cursor.execute(sql)
+                category_associations = cursor.fetchall()
+                return category_associations
