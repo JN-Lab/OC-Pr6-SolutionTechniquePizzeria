@@ -1,13 +1,10 @@
 #! /usr/bin/env python3
 # coding: utf-8
-import random
-from faker import Faker
 from db_connexion import SQLconnexion
 
 class InjectRestaurantData:
 
     def __init__(self):
-        self.fake_data = Faker("fr_FR")
         self.restaurants = ["OC-Pizza Paris13",
                             "OC-Pizza Paris18",
                             "OC-Pizza Paris9",
