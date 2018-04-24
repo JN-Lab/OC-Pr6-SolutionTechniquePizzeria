@@ -15,8 +15,8 @@ class Inject:
 
     def start(self):
         self.inject_user.set_role()
-        self.inject_user.set_employees(5)
-        self.inject_user.set_customers(5)
+        self.inject_user.set_employees(10)
+        self.inject_user.set_customers(10)
 
         self.inject_pizza.set_ingredients()
         self.inject_pizza.set_recipes(10)

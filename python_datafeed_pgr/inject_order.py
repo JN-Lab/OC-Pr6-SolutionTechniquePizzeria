@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 # coding: utf-8
-from db_connexion import SQLconnexion
 from faker import Faker
+from db_connexion import SQLconnexion
+
 
 class InjectOrderData:
 
