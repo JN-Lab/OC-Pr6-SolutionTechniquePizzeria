@@ -29,3 +29,4 @@ class Inject:
         self.inject_order.set_payment_methods()
         self.inject_order.set_payment_status()
         self.inject_order.set_order_status()
+        self.inject_order.set_order(3)
