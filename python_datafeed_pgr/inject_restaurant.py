@@ -37,14 +37,6 @@ class InjectRestaurantData:
         all_employee_ids = self._get_employee_ids()
         employee_ids = [employee['id_utilisateur'] for employee in all_employee_ids]
 
-        # Invent fake date for start job
-        date_list = []
-        numb_date = 0
-        while numb_date < 5:
-            date = self.fake_data.date()
-            date_list.append(date)
-            numb_date += 1
-
         # We go for insertion
         for restaurant in self.restaurants:
             restaurant_info = {
@@ -54,11 +46,8 @@ class InjectRestaurantData:
                 "pizza_ids" : pizza_ids,
                 "ingredient_ids" : ingredient_ids,
                 "ingredients_quantity" : ingr_qty_per_rest,
-                "employee_ids" : random.sample(employee_ids, 5),
-                "date_start" : date_list
+                "employee_ids" : random.sample(employee_ids, 5)
             }
-
-            print(restaurant_info)
 
             with SQLconnexion() as connexion:
                 # We insert basic information into restaurant table
@@ -102,15 +91,14 @@ class InjectRestaurantData:
                     connexion.commit()
 
                 # We insert employee staff
-                for index, employe_id in enumerate(employee_ids):
+                for employee_id in restaurant_info["employee_ids"]:
                     with connexion.cursor() as cursor:
                         sql = """INSERT INTO staff
                                     (id_restaurant, id_utilisateur, date_debut, date_fin)
-                                VALUES(%s, %s, %s, %s)"""
+                                VALUES(%s, %s, %s, NULL)"""
                         cursor.execute(sql, (restaurant_info["id"],
-                                             employe_id,
-                                             restaurant_info["date_start"][index],
-                                             restaurant_info["date_start"][index]))
+                                             employee_id,
+                                             self.fake_data.date()))
                     connexion.commit()
 
     def _get_address_ids(self):
