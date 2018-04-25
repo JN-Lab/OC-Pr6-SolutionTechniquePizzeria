@@ -63,10 +63,24 @@ class InjectOrderData:
         all_restaurant_ids = self._get_restaurant_ids()
         restaurant_ids = [restaurant['id'] for restaurant in all_restaurant_ids]
 
+        # We get delivery type ids
+        all_delivery_type_ids = self._get_delivery_type_ids()
+        delivery_type_ids = [delivery_type['id'] for delivery_type in all_delivery_type_ids]
+
+        # We get payment method ids
+        all_payment_method_ids = self._get_payment_method_ids()
+        payment_method_ids = [method['id'] for method in all_payment_method_ids]
+
+        # We get payment_status ids
+        all_payment_status_ids = self._get_payment_status_ids()
+        payment_status_ids = [status['id'] for status in all_payment_status_ids]
+
         with SQLconnexion() as connexion:
+            # We start the loop
             numb_order = 0
             while numb_order < number:
 
+                ## WE DEFINE ALL THE NECESSARY INFORMATION FOR INSERTION
                 selected_pizza = random.sample(all_pizza_infos, 3)
                 pizza_infos = {
                     "ids" : [pizza['id'] for pizza in selected_pizza],
@@ -82,15 +96,36 @@ class InjectOrderData:
                     "date" : self.fake_data.date_this_year(),
                     "delivery_address_id" : self.fake_data.random_element(elements=address_ids),
                     "invoice_address_id" : self.fake_data.random_element(elements=address_ids),
-                    "delivery_type": self.fake_data.random_element(elements=self.delivery_types),
-                    "payment_method": self.fake_data.random_element(elements=self.payment_methods),
-                    "payment_status": self.fake_data.random_element(elements=self.payment_status),
-                    "order_status": "en attente",
-                    "restaurant_id" : self.fake_data.random_element(elements=restaurant_ids),
+                    "delivery_type": self.fake_data.random_element(elements=delivery_type_ids),
+                    "payment_method": self.fake_data.random_element(elements=payment_method_ids),
+                    "payment_status": self.fake_data.random_element(elements=payment_status_ids),
+                    "order_status": "1",
+                    "restaurant" : self.fake_data.random_element(elements=restaurant_ids),
                 }
 
                 print(pizza_infos)
                 print(order)
+
+                ## WE START INSERTION PROCESS
+
+                # We insert data in order table
+                with connexion.cursor() as cursor:
+                    sql = """INSERT INTO commande
+                                (prix_ttc, tva, date_commande, id_adresse_livraison,
+                                 id_adresse_facturation, id_type_livraison, id_statut_paiement,
+                                 id_mode_reglement, id_restaurant)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                    cursor.execute(sql, (order["amount"],
+                                         "5.50",
+                                         order["date"],
+                                         order["delivery_address_id"],
+                                         order["invoice_address_id"],
+                                         order["delivery_type"],
+                                         order["payment_status"],
+                                         order["payment_method"],
+                                         order["restaurant"]
+                                        ))
+                connexion.commit()
                 numb_order += 1
 
     def _get_address_ids(self):
@@ -116,3 +151,27 @@ class InjectOrderData:
                 cursor.execute(sql)
                 restaurant_ids = cursor.fetchall()
                 return restaurant_ids
+
+    def _get_delivery_type_ids(self):
+        with SQLconnexion() as connexion:
+            with connexion.cursor() as cursor:
+                sql = """SELECT id FROM type_livraison"""
+                cursor.execute(sql)
+                delivery_ids = cursor.fetchall()
+                return delivery_ids
+
+    def _get_payment_method_ids(self):
+        with SQLconnexion() as connexion:
+            with connexion.cursor() as cursor:
+                sql = """SELECT id FROM mode_reglement"""
+                cursor.execute(sql)
+                payment_method_ids = cursor.fetchall()
+                return payment_method_ids
+
+    def _get_payment_status_ids(self):
+        with SQLconnexion() as connexion:
+            with connexion.cursor() as cursor:
+                sql = """SELECT id FROM statut_paiement"""
+                cursor.execute(sql)
+                payment_status_ids = cursor.fetchall()
+                return payment_status_ids
