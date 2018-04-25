@@ -103,9 +103,6 @@ class InjectOrderData:
                     "restaurant" : self.fake_data.random_element(elements=restaurant_ids),
                 }
 
-                print(pizza_infos)
-                print(order)
-
                 ## WE START INSERTION PROCESS
 
                 # We insert data in order table
@@ -126,6 +123,38 @@ class InjectOrderData:
                                          order["restaurant"]
                                         ))
                 connexion.commit()
+
+                # We get the order id we just created
+                with connexion.cursor() as cursor:
+                    sql = """SELECT id FROM commande
+                        ORDER BY id DESC LIMIT 1"""
+                    cursor.execute(sql)
+                    result = cursor.fetchone()
+                    order["id"] = result["id"]
+
+                # We insert the initial statut with the order
+                with connexion.cursor() as cursor:
+                    sql = """INSERT INTO evolution_preparation
+                                (id_commande, id_statut_commande,
+                                date_debut_operation, date_fin_operation)
+                        VALUES (%s, %s, %s, NULL)"""
+                    cursor.execute(sql, (order["id"],
+                                         order["order_status"],
+                                         order["date"]))
+                connexion.commit()
+
+                # We insert all the pizza informations linked to the order
+                for index, pizza_id in enumerate(pizza_infos["ids"]):
+                    with connexion.cursor() as cursor:
+                        sql = """INSERT INTO quantite_pizza_par_commande
+                                    (id_pizza, id_commande, prix_unitaire_paye, quantite)
+                            VALUES (%s, %s, %s, %s)"""
+                        cursor.execute(sql, (pizza_id,
+                                             order["id"],
+                                             pizza_infos["unit_prices"][index],
+                                             pizza_infos["qties"][index]))
+                    connexion.commit()
+
                 numb_order += 1
 
     def _get_address_ids(self):
