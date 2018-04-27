@@ -4,6 +4,7 @@ from inject_pizza import InjectPizzaData
 from inject_user import InjectUserData
 from inject_restaurant import InjectRestaurantData
 from inject_order import InjectOrderData
+from interactions import DataInteractions
 
 class Inject:
 
@@ -12,6 +13,7 @@ class Inject:
         self.inject_pizza = InjectPizzaData()
         self.inject_restaurant = InjectRestaurantData()
         self.inject_order = InjectOrderData()
+        self.data_interaction = DataInteractions()
 
     def start(self):
         self.inject_user.set_role()
@@ -30,3 +32,5 @@ class Inject:
         self.inject_order.set_payment_status()
         self.inject_order.set_order_status()
         self.inject_order.set_order(50)
+
+        self.data_interaction.modify_some_orders_status()
