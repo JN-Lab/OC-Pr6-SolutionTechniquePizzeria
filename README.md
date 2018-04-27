@@ -24,3 +24,16 @@ Le repository est organisé pour rassembler l'ensemble des éléments à fournir
 * deliverables
 * SQL_requests
 * python_datafeed_pgr
+
+# Installer la base de données
+Pour installer la base de données, il suffit d'exécuter le fichier **p6_database.sql** qui se trouve dans le répertoire **SQL_requests**. Ce dernier contient l'ensemble des scripts SQL pour créer les tables et l'ensemble des clefs associées à la base de donnée **p6_project**
+
+# Injecter de la donnée test dans la base de données
+Pour injecter de la donnée test dans la base de données et réaliser des tests, il suffit d'exécuter dans le terminal le programme python présent dans le répertoire **python_datafeed_pgr**.
+
+```
+python3 main.py
+```
+
+# Informations supplémentaires
+Quelques requêtes de sélections sont présentées dans le fichier **test_requests.sql** présent dans le répertoire **SQL_requests**.
