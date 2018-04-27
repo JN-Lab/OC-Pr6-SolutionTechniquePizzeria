@@ -90,8 +90,14 @@ INNER JOIN restaurant
     ON stock_ingredient_par_restaurant.id_restaurant = restaurant.id
 WHERE restaurant.nom LIKE "%Paris9";
 
--- Select the restaurants where the quantity allocated for an ingredient is < to 10% from the global quantity
-SELECT restaurant.nom
+-- Select the restaurants where the quantity allocated for an ingredient is < to 5% from the global quantity
+SELECT restaurant.nom, ingredient.nom, stock_ingredient_par_restaurant.quantite_allouee
+FROM stock_ingredient_par_restaurant
+INNER JOIN ingredient
+    ON stock_ingredient_par_restaurant.id_ingredient = ingredient.id
+INNER JOIN restaurant
+    ON stock_ingredient_par_restaurant.id_restaurant = restaurant.id
+WHERE quantite_allouee < quantite_globale * 0.05;
 
 -- Requests to pass an ingredient to zero with impact on pizza availablity
 

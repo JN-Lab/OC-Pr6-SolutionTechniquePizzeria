@@ -51,7 +51,9 @@ class DataInteractions:
 
     def modify_some_ingredients_quantity_per_restaurants(self):
         """The objective of this method is to update the quantity of some ingredients
-        for some restaurants to zero on a random way"""
+        for some restaurants to zero on a random way and manage all the impacts
+        on datas, i.e, update the global quantity fro the concerned ingredients
+        and update the availablity status for concerned pizzas for each restaurant"""
 
         ingredients = self._get_ingredients_quantity_per_restaurant()
 
@@ -89,7 +91,28 @@ class DataInteractions:
                                          ingredient["id_ingredient"]))
                 connexion.commit()
 
+                # We need to update pizza availability according these modifications
+                # First selection of pizza ids impacted
+                pizza_ids = []
+                with connexion.cursor() as cursor:
+                    sql = """SELECT quantite_ingredient_par_pizza.id_pizza FROM ingredient
+                            INNER JOIN quantite_ingredient_par_pizza
+                                ON ingredient.id = quantite_ingredient_par_pizza.id_ingredient
+                            INNER JOIN stock_ingredient_par_restaurant
+                                ON ingredient.id = stock_ingredient_par_restaurant.id_ingredient
+                            WHERE quantite_allouee < quantite_necessaire"""
+                    cursor.execute(sql)
+                    global_result = cursor.fetchall()
+                    pizza_ids = [result["id_pizza"] for result in global_result]
 
+                # We update availability status for each pizza
+                for pizza_id in pizza_ids:
+                    with connexion.cursor() as cursor:
+                        sql = """UPDATE disp_pizza_par_rest
+                                SET disponibilite = 'indisponible'
+                                WHERE id_pizza = %s"""
+                        cursor.execute(sql, (pizza_id))
+                    connexion.commit()
 
     def _get_ingredients_quantity_per_restaurant(self):
         with SQLconnexion() as connexion:
