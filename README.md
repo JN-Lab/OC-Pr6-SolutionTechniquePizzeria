@@ -40,7 +40,7 @@ python3 main.py
 ### Requêtes de sélections test
 Quelques requêtes de sélections sont présentées dans le fichier **test_requests.sql** présent dans le répertoire **SQL_requests**.
 
-### Packages utilisées
+### Packages utilisés
 Les packages supplémentaires utilisés et présents dans le fichier requirements.txt sont:
 
 * pylint
