@@ -43,6 +43,6 @@ Quelques requêtes de sélections sont présentées dans le fichier **test_reque
 ### Packages utilisées
 Les packages supplémentaires utilisés et présents dans le fichier requirements.txt sont:
 
-*pylint
-*pymysql
-*faker
+* pylint
+* pymysql
+* faker

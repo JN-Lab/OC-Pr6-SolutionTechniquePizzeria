@@ -14,13 +14,13 @@ class DataInteractions:
         which had been injected and pass them from 'en attente' statut to
         'en preparation' status """
 
-        # We get 5 order_ids on a random way
-        orders = self._get_5_orders()
+        # We get 10 order_ids on a random way
+        orders = self._get_10_orders()
 
         # on modifie leur statut de commande à en preparations en ajoutant 30 minutes ou 2heures
         with SQLconnexion() as connexion:
             for order in orders:
-                step_date = order["date_debut_operation"] + datetime.timedelta(hours=1)
+                step_date = order["date_debut_operation"] + datetime.timedelta(minutes=random.randint(10, 75))
                 with connexion.cursor() as cursor:
                     sql = """UPDATE evolution_preparation
                             SET date_fin_operation = %s
@@ -40,11 +40,11 @@ class DataInteractions:
                 connexion.commit()
 
 
-    def _get_5_orders(self):
+    def _get_10_orders(self):
         with SQLconnexion() as connexion:
             with connexion.cursor() as cursor:
                 sql = """SELECT id_commande, date_debut_operation FROM evolution_preparation
-                    ORDER BY RAND() LIMIT 5"""
+                    ORDER BY RAND() LIMIT 10"""
                 cursor.execute(sql)
                 orders = cursor.fetchall()
                 return orders

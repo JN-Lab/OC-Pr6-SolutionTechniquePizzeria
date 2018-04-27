@@ -43,6 +43,7 @@ WHERE staff.id_restaurant IN (
 -- ---------------------------------------------
 
 -- Select all the orders from a restaurant where the orders status is 'en preparation'
+
 SELECT commande.id, restaurant.nom
 FROM commande
 INNER JOIN restaurant
@@ -55,16 +56,33 @@ WHERE id_statut_commande IN (
 )
 ORDER BY restaurant.nom;
 
--- Select all the orders from a restaurant where it tooks more than 1 hour go trough the status 'en preparation'
+-- Select all the orders from a restaurant where it tooks more than 30 minutes to go trough the status 'en preparation'
 
--- Calculate the average time it takes for a restaurant to start an order (from 'en attente' to "en prepartion")
+SELECT evolution_preparation.id_commande, statut_commande.statut_commande, TIMEDIFF(evolution_preparation.date_fin_operation, evolution_preparation.date_debut_operation) as duree
+FROM evolution_preparation
+INNER JOIN statut_commande
+    ON evolution_preparation.id_statut_commande = statut_commande.id
+WHERE evolution_preparation.date_fin_operation IS NOT NULL;
+
+-- Calculate the average time it takes per restaurant to start an order (from 'en attente' to "en preparation" status)
+
+SELECT restaurant.nom as restaurant, SEC_TO_TIME(AVG(TIMESTAMPDIFF(SECOND,evolution_preparation.date_debut_operation, evolution_preparation.date_fin_operation))) as duree_moyenne_statut_en_attente
+FROM commande
+INNER JOIN evolution_preparation
+    ON commande.id = evolution_preparation.id_commande
+INNER JOIN restaurant
+    ON commande.id_restaurant = restaurant.id
+WHERE evolution_preparation.date_fin_operation IS NOT NULL
+    AND id_statut_commande IN
+        (SELECT id FROM statut_commande WHERE statut_commande = "en attente")
+GROUP BY restaurant.nom;
 
 -- --------------------------------------------
 -- Ingredients management for a restaurant
 -- --------------------------------------------
 
 -- Select all the ingredients from a restaurant
-SELECT ingredient.nom, stock_ingredient_par_restaurant.quantite_allouee
+SELECT ingredient.nom, stock_ingredient_par_restaurant.quantite_allouee as quantite
 FROM stock_ingredient_par_restaurant
 INNER JOIN ingredient
     ON stock_ingredient_par_restaurant.id_ingredient = ingredient.id
