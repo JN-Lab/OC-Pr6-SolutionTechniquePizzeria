@@ -81,16 +81,17 @@ GROUP BY restaurant.nom;
 -- Ingredients management for a restaurant
 -- --------------------------------------------
 
--- Select all the ingredients from a restaurant
+-- Select all the ingredients from a restaurant (example for OC-Pizza Paris9)
 SELECT ingredient.nom, stock_ingredient_par_restaurant.quantite_allouee as quantite
 FROM stock_ingredient_par_restaurant
 INNER JOIN ingredient
     ON stock_ingredient_par_restaurant.id_ingredient = ingredient.id
 INNER JOIN restaurant
     ON stock_ingredient_par_restaurant.id_restaurant = restaurant.id
-WHERE restaurant.nom LIKE "%PARIS9";
+WHERE restaurant.nom LIKE "%Paris9";
 
 -- Select the restaurants where the quantity allocated for an ingredient is < to 10% from the global quantity
+SELECT restaurant.nom
 
 -- Requests to pass an ingredient to zero with impact on pizza availablity
 

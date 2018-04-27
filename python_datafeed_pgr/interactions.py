@@ -48,3 +48,53 @@ class DataInteractions:
                 cursor.execute(sql)
                 orders = cursor.fetchall()
                 return orders
+
+    def modify_some_ingredients_quantity_per_restaurants(self):
+        """The objective of this method is to update the quantity of some ingredients
+        for some restaurants to zero on a random way"""
+
+        ingredients = self._get_ingredients_quantity_per_restaurant()
+
+        # We get a sample of 6 ingredients-restaurants
+        sample_ingredients = random.sample(ingredients, 6)
+
+        with SQLconnexion() as connexion:
+            for ingredient in sample_ingredients:
+
+                # We get initial quantity before to set it to zero
+                initial_quantity = 0
+                with connexion.cursor() as cursor:
+                    sql = """SELECT quantite_allouee FROM stock_ingredient_par_restaurant
+                            WHERE id_ingredient = %s AND id_restaurant = %s"""
+                    cursor.execute(sql, (ingredient["id_ingredient"],
+                                         ingredient["id_restaurant"]))
+                    quantity = cursor.fetchone()
+                    initial_quantity = quantity["quantite_allouee"]
+
+                # We set the quantity to zero
+                with connexion.cursor() as cursor:
+                    sql = """UPDATE stock_ingredient_par_restaurant
+                            SET quantite_allouee = '0'
+                            WHERE id_ingredient = %s AND id_restaurant = %s"""
+                    cursor.execute(sql, (ingredient["id_ingredient"],
+                                         ingredient["id_restaurant"]))
+                connexion.commit()
+
+                # We update the global quantity from this ingredient on ingredient table
+                with connexion.cursor() as cursor:
+                    sql = """UPDATE ingredient
+                            SET quantite_globale = quantite_globale - %s
+                            WHERE id = %s"""
+                    cursor.execute(sql, (initial_quantity,
+                                         ingredient["id_ingredient"]))
+                connexion.commit()
+
+
+
+    def _get_ingredients_quantity_per_restaurant(self):
+        with SQLconnexion() as connexion:
+            with connexion.cursor() as cursor:
+                sql = """SELECT * FROM stock_ingredient_par_restaurant"""
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                return result

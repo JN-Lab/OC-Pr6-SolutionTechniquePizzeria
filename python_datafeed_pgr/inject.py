@@ -34,3 +34,4 @@ class Inject:
         self.inject_order.set_order(50)
 
         self.data_interaction.modify_some_orders_status()
+        self.data_interaction.modify_some_ingredients_quantity_per_restaurants()
