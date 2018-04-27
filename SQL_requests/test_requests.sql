@@ -99,6 +99,12 @@ INNER JOIN restaurant
     ON stock_ingredient_par_restaurant.id_restaurant = restaurant.id
 WHERE quantite_allouee < quantite_globale * 0.05;
 
--- Requests to pass an ingredient to zero with impact on pizza availablity
-
--- Select all the pizza from a restaurant which are not available
+-- Select all the pizza not availbale per restaurant
+SELECT restaurant.nom as restaurant, pizza.nom as pizza, disp_pizza_par_rest.disponibilite as stock
+FROM disp_pizza_par_rest
+INNER JOIN pizza
+    ON disp_pizza_par_rest.id_pizza = pizza.id
+INNER JOIN restaurant
+    ON disp_pizza_par_rest.id_restaurant = restaurant.id
+WHERE disponibilite = 'indisponible'
+ORDER BY restaurant.nom, pizza.nom;
