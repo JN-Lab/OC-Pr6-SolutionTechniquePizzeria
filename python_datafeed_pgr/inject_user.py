@@ -74,7 +74,7 @@ class InjectUserData:
                 "name": self.fake_data.last_name(),
                 "first_name" : self.fake_data.first_name(),
                 "mail" : self.fake_data.free_email(),
-                "password" : self.fake_data.password(40),
+                "password" : self.fake_data.password(255),
                 "creation_date" : self.fake_data.date(),
                 "delivery_address" : {
                     "person" : self.fake_data.name(),

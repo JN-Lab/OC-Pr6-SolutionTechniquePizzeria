@@ -82,6 +82,7 @@ GROUP BY restaurant.nom;
 -- --------------------------------------------
 
 -- Select all the ingredients from a restaurant (example for OC-Pizza Paris9)
+
 SELECT ingredient.nom, stock_ingredient_par_restaurant.quantite_allouee as quantite
 FROM stock_ingredient_par_restaurant
 INNER JOIN ingredient
@@ -91,6 +92,7 @@ INNER JOIN restaurant
 WHERE restaurant.nom LIKE "%Paris9";
 
 -- Select the restaurants where the quantity allocated for an ingredient is < to 5% from the global quantity
+
 SELECT restaurant.nom, ingredient.nom, stock_ingredient_par_restaurant.quantite_allouee
 FROM stock_ingredient_par_restaurant
 INNER JOIN ingredient
@@ -100,6 +102,7 @@ INNER JOIN restaurant
 WHERE quantite_allouee < quantite_globale * 0.05;
 
 -- Select all the pizza not availbale per restaurant
+
 SELECT restaurant.nom as restaurant, pizza.nom as pizza, disp_pizza_par_rest.disponibilite as stock
 FROM disp_pizza_par_rest
 INNER JOIN pizza
